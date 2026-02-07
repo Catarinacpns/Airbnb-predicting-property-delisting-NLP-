@@ -113,7 +113,6 @@ The **MLP Classifier** with **TF-IDF** features was selected as the final model 
 * `learning_rate`: 'adaptive'
 * `alpha`: 0.3594
 
-Final predictions on the unseen test set resulted in **489** properties predicted as "Listed" (Class 0) and **206** as "Unlisted" (Class 1).
 ---
 
 ## 7. Conclusion
