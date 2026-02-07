@@ -1,0 +1,36 @@
+Repository Structure:
+.
+├── README.md
+├── data
+│   ├── cleaned
+│   │   ├── airbnb_test_reviews_cleaned.csv
+│   │   ├── airbnb_test_vf.csv
+│   │   ├── airbnb_train_reviews_cleaned.csv
+│   │   ├── airbnb_train_vf.csv
+│   │   ├── test_description_cleaned.csv
+│   │   ├── test_host_cleaned.csv
+│   │   ├── test_reviews_vf.csv
+│   │   ├── test_vf.csv
+│   │   ├── train_description_cleaned.csv
+│   │   ├── train_host_cleaned.csv
+│   │   ├── train_reviews_vf.csv
+│   │   └── train_vf.csv
+│   ├── test.xlsx
+│   ├── test_property.csv
+│   ├── test_reviews.xlsx
+│   ├── train.xlsx
+│   ├── train_property.csv
+│   └── train_reviews.xlsx
+├── figures
+│   └── AUC_models.png
+├── notebooks
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_preprocessing.ipynb
+│   ├── 03_feature_engineering.ipynb
+│   ├── 04_model_testing_eval.ipynb
+│   └── results
+├── predictions
+│   └── Test_predictions.csv
+├── repo_structure.txt
+├── requirements.txt
+├── tree.py
