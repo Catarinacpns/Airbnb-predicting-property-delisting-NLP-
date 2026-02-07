@@ -7,10 +7,11 @@ The goal of this project is to use Natural Language Processing (NLP) models to p
 2. [Data Preprocessing](#2-data-preprocessing)
 3. [Feature Engineering](#3-feature-engineering)
 4. [Installation & Setup](#4-installation--setup)
-5. [Notebooks Overview](#5-notebooks-overview)
-6. [Classification Models](#6-classification-models)
-7. [Results & Evaluation](#7-results--evaluation)
-8. [Conclusion](#8-conclusion)
+5. [Project Starting Point – The Corpora](#5-project-starting-point--the-corpora)
+6. [Notebooks Overview](#6-notebooks-overview)
+7. [Classification Models – Model Testing](#7-classification-models--model-testing)
+8. [Results & Evaluation](#8-results--evaluation)
+9. [Conclusion](#9-conclusion)
 
 ---
 
