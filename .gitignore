@@ -198,3 +198,7 @@ env/
 .idea/
 >>>>>>> 357202f (uddated .gitignore)
 .DS_Store
+project_data/
+*.pdf
+*.docx
+~
