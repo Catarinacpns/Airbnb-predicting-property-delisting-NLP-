@@ -189,7 +189,6 @@ env/
 *.h5
 *.pth
 *.onnx
-/data/
 
 # OS specific
 .DS_Store
@@ -198,3 +197,4 @@ env/
 .vscode/
 .idea/
 >>>>>>> 357202f (uddated .gitignore)
+.DS_Store
