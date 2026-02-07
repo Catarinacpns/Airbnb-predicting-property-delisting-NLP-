@@ -7,9 +7,10 @@ The goal of this project is to use Natural Language Processing (NLP) models to p
 2. [Data Preprocessing](#2-data-preprocessing)
 3. [Feature Engineering](#3-feature-engineering)
 4. [Installation & Setup](#4-installation--setup)
-5. [Classification Models](#5-classification-models)
-6. [Results & Evaluation](#6-results--evaluation)
-7. [Conclusion](#7-conclusion)
+5. [Notebooks Overview](#5-notebooks-overview)
+6. [Classification Models](#6-classification-models)
+7. [Results & Evaluation](#7-results--evaluation)
+8. [Conclusion](#8-conclusion)
 
 ---
 
@@ -31,8 +32,6 @@ The pipeline covers the entire lifecycle of an NLP project, from multilingual la
 
 ### 2.2 Data Integrity
 To maintain data integrity, missing values in property and host descriptions were filled with an `"empty"` placeholder. This ensures that properties are not dropped simply because a specific text field was missing.
-
-
 
 ---
 
@@ -62,60 +61,81 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+---
 
-## 5. Classification Models – Model Testing
+## 5. Project Starting Point – The Corpora
 
-To identify the most effective model and feature extraction method, we performed a comprehensive evaluation using **TF-IDF** and **LaBSE** (our top two performing extraction techniques). 
+All raw data files are located in the `data/` folder, while the analytical workflow is contained within the `notebooks/` directory.
 
-### 5.1 Training Methodology
-* **Hyperparameter Tuning:** We employed `RandomizedSearchCV` to efficiently explore combinations of hyperparameters.
-* **Cross-Validation:** 5-fold cross-validation was used consistently to ensure the models generalized well and to mitigate overfitting.
-* **Model Selection:** We tested a variety of architectures, from linear models to deep learning and ensemble methods.
+### 5.1 Dataset Contextualization
+The project is built upon two main types of data: **Property Metadata** (descriptions and host info) and **User-Generated Content** (guest reviews).
+
+* **Train Set (`data/train.xlsx`)**: 
+    * **Size:** 6,248 properties.
+    * **Content:** Contains Airbnb "description", "host_about", and the target variable "unlisted".
+    * **Target:** `1` (removed from list/churn) vs `0` (remains listed).
+* **Train Reviews (`data/train_reviews.xlsx`)**:
+    * **Size:** 361,281 reviews.
+    * **Context:** Contains all guest comments per property. Some properties have hundreds of reviews, others none. Reviews are highly multilingual.
+* **Test Set (`data/test.xlsx`)**:
+    * **Size:** 695 properties.
+    * **Goal:** Does not contain labels. This set is used to generate the final predictions submitted for evaluation.
+* **Test Reviews (`data/test_reviews.xlsx`)**:
+    * **Size:** 41,866 reviews.
+    * **Context:** Guest comments specifically for the properties listed in the Test Set.
 
 ---
 
-## 6. Results & Evaluation
+## 6. Notebooks Overview
 
-### 6.1 Feature Extraction Comparison
-Before finalizing our classifiers, we evaluated how different feature extraction methods performed using a baseline Logistic Regression model.
+The project workflow is split into four sequential notebooks located in the `notebooks/` folder. Each step depends on the outputs (stored in `data/cleaned/`) of the previous one.
+
+| Notebook | Description |
+| :--- | :--- |
+| **`01_data_exploration.ipynb`** | **Initial Analysis:** Merging the main datasets with the reviews corpora. Analyzing the class imbalance and exploring text length distributions across the 6,248 training samples. |
+| **`02_preprocessing.ipynb`** | **Multilingual Cleaning:** Processing the ~400k total reviews and property texts. Includes language detection and lemmatization for the 8 identified core languages. |
+| **`03_feature_engineering.ipynb`** | **Vectorization:** Converting the cleaned corpora into numerical formats. This notebook compares sparse representations (TF-IDF) against dense embeddings (BERT/LaBSE). |
+| **`04_model_testing_eval.ipynb`** | **Modeling:** Training classifiers to predict the "unlisted" status. Features 5-fold cross-validation and the generation of the final `predictions/Test_predictions.csv`. |
+
+---
+
+## 7. Classification Models – Model Testing
+
+To identify the most effective model, we performed a comprehensive evaluation using **TF-IDF** and **LaBSE** (our top-performing extraction techniques). 
+
+### 7.1 Training Methodology
+* **Hyperparameter Tuning:** Used `RandomizedSearchCV` for efficiency.
+* **Cross-Validation:** 5-fold cross-validation was used to ensure the models generalize well across the 6,248 training instances.
+* **Model Selection:** Tested linear models, deep learning (MLP), and ensemble methods (XGBoost).
+
+---
+
+## 8. Results & Evaluation
+
+### 8.1 Feature Extraction Comparison (Logistic Regression Baseline)
 
 | Metric | BoW | TF-IDF | Word2Vec | BERT | LaBSE |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Mean Accuracy** | 0.858 | **0.886** | 0.874 | 0.859 | 0.878 |
-| **Mean Precision** | 0.732 | **0.769** | 0.739 | 0.742 | 0.755 |
-| **Mean Recall** | 0.760 | 0.835 | **0.837** | 0.745 | 0.820 |
 | **Mean F1 Score** | 0.745 | **0.800** | 0.785 | 0.743 | 0.786 |
 
-> **Observation:** TF-IDF provided the best overall performance, followed closely by LaBSE.
-
-### 6.2 Model Performance Summary (Weighted F1)
-We compared the top models using both TF-IDF and LaBSE features.
-
-| Feature Set | LogReg | KNN | MLP | XGBoost | **Average** |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **TF-IDF** | **0.8038** | 0.7916 | 0.7950 | 0.7918 | **0.7956** |
-| **LaBSE** | 0.7841 | 0.7965 | 0.7870 | 0.8013 | 0.7922 |
-
-### 6.3 Performance Comparison (ROC AUC Curve)
-To visualize the performance of all models simultaneously, we utilized the Receiver Operating Characteristic (ROC) curve. This comparison allows us to see how each model balances the True Positive Rate against the False Positive Rate across different thresholds.
-
+### 8.2 Performance Comparison (ROC AUC Curve)
 
 ![ROC AUC Curve for All Models Comparison](figures/AUC_models.png)
-*Figure 1: Comparison of ROC Curves for Logistic Regression, KNN, MLP, XGBoost, and DistilBERT. The Area Under the Curve (AUC) confirms which models provide the most reliable separation between classes.*
+*Figure 1: Comparison of ROC Curves. The Area Under the Curve (AUC) confirms which models provide the most reliable separation between classes.*
 
-### 6.4 Best Performing Model and Test Data Predictions
+### 8.3 Best Performing Model: MLP
 The **MLP Classifier** with **TF-IDF** features was selected as the final model due to its robust non-linear learning capabilities.
 
 **Optimal Hyperparameters:**
 * `hidden_layer_sizes`: (30)
 * `activation`: 'tanh'
 * `solver`: 'sgd'
-* `learning_rate`: 'adaptive'
 * `alpha`: 0.3594
-
+  
 ---
 
-## 7. Conclusion
+## 8. Conclusion
 
 This project highlights the efficiency of traditional NLP techniques when applied to multilingual real-world data. While Transformer models like **DistilBERT** and **LaBSE** are highly sophisticated, **TF-IDF** combined with a **Multi-Layer Perceptron (MLP)** delivered the most reliable and robust results for predicting Airbnb property delistings.
 
