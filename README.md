@@ -93,9 +93,9 @@ The project workflow is split into four sequential notebooks located in the `not
 
 | Notebook | Description |
 | :--- | :--- |
-| **`01_data_exploration.ipynb`** | **Initial Analysis:** Merging the main datasets with the reviews corpora. Analyzing the class imbalance and exploring text length distributions across the 6,248 training samples. |
+| **`01_data_exploration.ipynb`** | **Initial Analysis:** Merging the main datasets with the reviews corpora. Analyzing the class imbalance and exploring text length distributions across the 6,248 training samples. The analysis is done before and after cleaning the data. |
 | **`02_preprocessing.ipynb`** | **Multilingual Cleaning:** Processing the ~400k total reviews and property texts. Includes language detection and lemmatization for the 8 identified core languages. |
-| **`03_feature_engineering.ipynb`** | **Vectorization:** Converting the cleaned corpora into numerical formats. This notebook compares sparse representations (TF-IDF) against dense embeddings (BERT/LaBSE). |
+| **`03_feature_engineering.ipynb`** | **Vectorization:** Converting the cleaned corpora into numerical formats. This notebook compares sparse representations (BoW, TF-IDF) and dense embeddings (Word2Vec, BERT, and LaBSE). |
 | **`04_model_testing_eval.ipynb`** | **Modeling:** Training classifiers to predict the "unlisted" status. Features 5-fold cross-validation and the generation of the final `predictions/Test_predictions.csv`. |
 
 ---
